@@ -1,17 +1,26 @@
 #!/usr/bin/env python3
+from models import db, User, Story, Comment
+from flask import Flask, request
+from flask_restful import Api, Resource
+from flask_cors import CORS
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
-# Standard library imports
+# Instantiate app, set attributes
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.json.compact = False
 
-# Remote library imports
-from flask import request
-from flask_restful import Resource
+migrate = Migrate(app, db)
 
-# Local imports
-from config import app, db, api
-# Add your model imports
+db.init_app(app)
 
 
-# Views go here!
+api = Api(app)
+
+CORS(app)
+
 
 @app.route('/')
 def index():
