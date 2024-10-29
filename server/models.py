@@ -21,8 +21,27 @@ class User(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
+
     comments = db.relationship("Comment", back_populates="user")
     stories = association_proxy("comments", "story", creator=lambda story_obj: Story(story=story_obj) )
+
+    @validates("username")
+    def validate_username(self, key, username):
+        if username == User.query.filter(User.username==username).first():
+            raise ValueError("Username already taken")
+        elif len(username) < 3:
+            return ValueError("Username must have at least 3 characters")
+        else:
+            return username
+
+    @validates("password")
+    def validate_password(self, key, password):
+        if len(password) < 8:
+            return ValueError("Password must have at least 8 characters.")
+        else:
+            return passoword
+
+
     
     def __repr__(self):
         return f"<User: {self.id}, {self.username}"
@@ -32,17 +51,47 @@ class Story(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     image = db.Column(db.String)
+    title = db.Column(db.String)
     story = db.Column(db.String)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     comments = db.relationship("Comment", back_populates='story')
     user = association_proxy("comments", "user", creator=lambda user_obj: User(user=user_obj))
+
+    @validates("title")
+    def validate_title(self, key, title):
+        if not title:
+            return ValueError("Your work must have a title")
+        else:
+            return title
+
+    @validates("story")
+    def validate_story(self, key, story):
+        if not story:
+            return ValueError("There is no work to submit")
+        elif len(story) < 1:
+            return ValueError("There is no work to submit")
+        else:
+            return story
+
 
 class Comment(db.Model, SerializerMixin):
     __tablename__="comments"
 
     id = db.Column(db.Integer, primary_key=True)
     comment = db.Column(db.String)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     story_id = db.Column(db.Integer, db.ForeignKey("stories.id"))
+
     user = db.relationship("User", back_populates='comments')
     story = db.relationship("Story", back_populates="comments")
+
+    @validates("comment")
+    def validate_comment(self, key, comment):
+        if not comment:
+            return ValueError("There is no comment to submit")
+        else:
+            return comment
