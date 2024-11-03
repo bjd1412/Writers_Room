@@ -18,11 +18,16 @@ db = SQLAlchemy(metadata=metadata)
 
 class User(db.Model, SerializerMixin):
     __tablename__="users"
+
+    serialize_rules = ("-comments.user",)
+
+
     id = db.Column(db.Integer, primary_key=True)
+    image = db.Column(db.String)
     username = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
 
-    comments = db.relationship("Comment", back_populates="user")
+    comments = db.relationship("Comment", back_populates="user", cascade="all, delete-orphan")
     stories = association_proxy("comments", "story", creator=lambda story_obj: Story(story=story_obj) )
 
     @validates("username")
@@ -39,7 +44,7 @@ class User(db.Model, SerializerMixin):
         if len(password) < 8:
             return ValueError("Password must have at least 8 characters.")
         else:
-            return passoword
+            return password
 
 
     
@@ -49,6 +54,8 @@ class User(db.Model, SerializerMixin):
 class Story(db.Model, SerializerMixin):
     __tablename__="stories"
 
+    serialize_rules = ("-comments.story",)
+
     id = db.Column(db.Integer, primary_key=True)
     image = db.Column(db.String)
     title = db.Column(db.String)
@@ -56,7 +63,7 @@ class Story(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    comments = db.relationship("Comment", back_populates='story')
+    comments = db.relationship("Comment", back_populates='story', cascade="all, delete-orphan")
     user = association_proxy("comments", "user", creator=lambda user_obj: User(user=user_obj))
 
     @validates("title")
@@ -79,6 +86,8 @@ class Story(db.Model, SerializerMixin):
 class Comment(db.Model, SerializerMixin):
     __tablename__="comments"
 
+    serialize_rules = ("-user.comments", "-story.comments",)
+
     id = db.Column(db.Integer, primary_key=True)
     comment = db.Column(db.String)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -86,8 +95,8 @@ class Comment(db.Model, SerializerMixin):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     story_id = db.Column(db.Integer, db.ForeignKey("stories.id"))
 
-    user = db.relationship("User", back_populates='comments')
-    story = db.relationship("Story", back_populates="comments")
+    user = db.relationship("User", back_populates='comments', cascade="all")
+    story = db.relationship("Story", back_populates="comments", cascade="all")
 
     @validates("comment")
     def validate_comment(self, key, comment):
