@@ -1,22 +1,24 @@
-import logo from './logo.svg';
+
 import './App.css';
+import { Outlet } from 'react-router-dom';
+import NavBar from './Components/NavBar';
+import {useEffect, useState} from 'react';
 
 function App() {
+  const [stories, setStories] = useState([])
+
+  useEffect(() => {
+    fetch("/stories")
+    .then(res => res.json())
+    .then(res => setStories(res))
+  }, [])
+
+
   return (
     <div className="App">
+      <NavBar/>
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+       <Outlet context={[stories, setStories]} />
       </header>
     </div>
   );
