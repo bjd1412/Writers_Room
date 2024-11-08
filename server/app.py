@@ -147,75 +147,64 @@ class Story_ID(Resource):
         
 
 
-class Comments(Resource):
-    def get(self):
-        comment = Comment.query.all()
-        comments = []
-        for comm in comment:
-            comm_dict = comm.to_dict(rules=("-story", "-user",))
-            comments.append(comm_dict)
-        return make_response(comments, 200)
-
-    def post(self):
-        data = request.form
-        try:
-            new_comment = Comment(
-            comment=data["comment"]
-            )
-        except:
-            return make_response({"Error": "Validation Error"}, 400)
-        db.session.add(new_comment)
-        db.session.commit()
-        return make_response(new_comment.to_dict(), 200)
-
-
-class Comment_ID(Resource):
-
-    def get(self, id):
-        comment = Comment.query.filter_by(id=id).first()
-        if comment:
-            return make_response(comment.to_dict(rules=("-story", "-user")), 200)
-        else:
-            return make_response({"Error": "Comment does not exist"})
-    
-    def patch(self, id):
-        comment = Comment.query.filter(Comment.id == id).first()
-        data = request.form
-        if comment:
-            try:
-                for attr in data:
-                    setattr(comment, attr, data[attr])
-                db.session.commit()
-                return make_response(comment.to_dict(), 200)
-            
-            except:
-                return make_response({"Error": "Validation Error"}, 400)
-        else:
-            return make_response({"Error": "Comment does not exist"})
-
-    def delete(self, id):
-        comment = Comment.query.filter(Comment.id==id).first()
-        if comment:
-            db.session.delete(comment)
-            db.session.commit()
-            return make_response("", 204)
-        else:
-            return make_response({"Error": "Comment does not exist"})
-
-
-
-
-       
-
-
-
-api.add_resource(Users, '/users')
-api.add_resource(User_ID, '/users/<int:id>' )
-api.add_resource(Story_ID, '/stories/<int:id>')
-api.add_resource(Stories, '/stories')
-api.add_resource(Comments, '/comments')
-api.add_resource(Comment_ID, '/comments/<int:id>')
-
+class Comments(Resource):  
+   def get(self):  
+      comments = Comment.query.all()  
+      return make_response([comment.to_dict() for comment in comments], 200)  
+  
+   def post(self):  
+      data = request.form  
+      try:  
+        new_comment = Comment(comment=data["comment"])  
+      except:  
+        return make_response({"Error": "Validation Error"}, 400)  
+      db.session.add(new_comment)  
+      db.session.commit()  
+      return make_response(new_comment.to_dict(), 200)  
+  
+class CommentResource(Resource):  
+   def get(self, id):  
+      comment = Comment.query.filter_by(id=id).first()  
+      if comment:  
+        return make_response(comment.to_dict(), 200)  
+      else:  
+        return make_response({"Error": "Comment not found"}, 404)  
+  
+   def patch(self, id):  
+      comment = Comment.query.filter(Comment.id == id).first()  
+      data = request.form  
+      if comment:  
+        try:  
+           for attr in data:  
+              setattr(comment, attr, data[attr])  
+           db.session.commit()  
+           return make_response(comment.to_dict(), 200)  
+        except:  
+           return make_response({"Error": "Validation Error"}, 400)  
+      else:  
+        return make_response({"Error": "Comment not found"}, 404)  
+  
+   def delete(self, id):  
+      comment = Comment.query.filter(Comment.id==id).first()  
+      if comment:  
+        db.session.delete(comment)  
+        db.session.commit()  
+        return make_response("", 204)  
+      else:  
+        return make_response({"Error": "Comment not found"}, 404)  
+  
+class CommentsByStoryID(Resource):  
+   def get(self, story_id):  
+      comments = Comment.query.filter(Comment.story_id == story_id).all()  
+      return make_response([comment.to_dict() for comment in comments], 200)  
+  
+api.add_resource(Users, '/users')  
+api.add_resource(User_ID, '/users/<int:id>')  
+api.add_resource(Story_ID, '/stories/<int:id>')  
+api.add_resource(Stories, '/stories')  
+api.add_resource(Comments, '/comments')  
+api.add_resource(CommentResource, '/comments/<int:id>')  
+api.add_resource(CommentsByStoryID, '/comments/by-story/<int:story_id>')
 
 
 if __name__ == '__main__':

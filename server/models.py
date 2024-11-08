@@ -23,7 +23,6 @@ class User(db.Model, SerializerMixin):
 
 
     id = db.Column(db.Integer, primary_key=True)
-    image = db.Column(db.String)
     username = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
 
@@ -82,11 +81,14 @@ class Story(db.Model, SerializerMixin):
         else:
             return story
 
+    def __repr__(self):
+        return f"<Story: {self.id}, {self.story}>"
+
 
 class Comment(db.Model, SerializerMixin):
     __tablename__="comments"
 
-    serialize_rules = ("-user.comments", "-story.comments",)
+    serialize_rules = ("-user.comments", "-story.comments", "story_id",)
 
     id = db.Column(db.Integer, primary_key=True)
     comment = db.Column(db.String)
@@ -97,6 +99,7 @@ class Comment(db.Model, SerializerMixin):
 
     user = db.relationship("User", back_populates='comments', cascade="all")
     story = db.relationship("Story", back_populates="comments", cascade="all")
+    
 
     @validates("comment")
     def validate_comment(self, key, comment):
@@ -104,3 +107,6 @@ class Comment(db.Model, SerializerMixin):
             return ValueError("There is no comment to submit")
         else:
             return comment
+
+    def __repr__(self):
+        return f"<Comment {self.id}>"

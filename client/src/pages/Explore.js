@@ -1,10 +1,11 @@
 import React from "react";
 import {useState} from "react"
 import StoryList from "../Components/StoryList";
-import { useOutletContext } from "react-router-dom";
+import StoryContext from "../Components/StoryContext";
+import { useContext } from "react";
 
 function Explore () {
-    const [stories, setStories] = useOutletContext()
+    const {stories, setStories} = useContext(StoryContext)
     const [search, setSearch] = useState("")
 
 
