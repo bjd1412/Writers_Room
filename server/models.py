@@ -50,39 +50,36 @@ class User(db.Model, SerializerMixin):
     def __repr__(self):
         return f"<User: {self.id}, {self.username}"
 
-class Story(db.Model, SerializerMixin):
-    __tablename__="stories"
-
-    serialize_rules = ("-comments.story",)
-
-    id = db.Column(db.Integer, primary_key=True)
-    image = db.Column(db.String)
-    title = db.Column(db.String)
-    story = db.Column(db.String)
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
-
-    comments = db.relationship("Comment", back_populates='story', cascade="all, delete-orphan")
-    user = association_proxy("comments", "user", creator=lambda user_obj: User(user=user_obj))
-
-    @validates("title")
-    def validate_title(self, key, title):
-        if not title:
-            return ValueError("Your work must have a title")
-        else:
-            return title
-
-    @validates("story")
-    def validate_story(self, key, story):
-        if not story:
-            return ValueError("There is no work to submit")
-        elif len(story) < 1:
-            return ValueError("There is no work to submit")
-        else:
-            return story
-
-    def __repr__(self):
-        return f"<Story: {self.id}, {self.story}>"
+class Story(db.Model, SerializerMixin):  
+   __tablename__="stories"  
+  
+   serialize_rules = ("-comments.story",)  
+  
+   id = db.Column(db.Integer, primary_key=True)  
+   title = db.Column(db.String)  
+   story = db.Column(db.String)  
+   created_at = db.Column(db.DateTime, server_default=db.func.now())  
+   updated_at = db.Column(db.DateTime, onupdate=db.func.now())  
+  
+   comments = db.relationship("Comment", back_populates='story', cascade="all, delete-orphan")  
+   user = association_proxy("comments", "user", creator=lambda user_obj: User(user=user_obj))  
+  
+   @validates("title")  
+   def validate_title(self, key, title):  
+      if not title:  
+        return ValueError("Your work must have a title")  
+      else:  
+        return title  
+  
+   @validates("story")  
+   def validate_story(self, key, story):  
+      if not story:  
+        return ValueError("There is no work to submit")         
+      else:  
+        return story  
+  
+   def __repr__(self):  
+      return f"<Story: {self.id}, {self.story}>"
 
 
 class Comment(db.Model, SerializerMixin):

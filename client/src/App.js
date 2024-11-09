@@ -21,15 +21,19 @@ function App() {
     .then(res => setComments(res))
   }, [])
 
-  function handleSubmit(NewWrite){
-    setStories([...stories, NewWrite])
+  function handleSubmit(newWrite){
+    setStories([...stories, newWrite])
+
+  function handleSubmitComments(newComment){
+    setComments([...comments, newComment])
+  }
 
   }
   return (
     <div className="App">
       <NavBar/>
       <header className="App-header">
-      <StoryContext.Provider value={{stories, setStories, comments, setComments, handleSubmit}}>
+      <StoryContext.Provider value={{stories, setStories, comments, setComments, handleSubmit, handleSubmitComments}}>
         <Outlet/>
       </StoryContext.Provider>    
       </header>

@@ -102,7 +102,6 @@ class Stories(Resource):
         data = request.form
         try:
             new_story = Story(
-            image=data["image"],
             title=data["title"],
             story=data["story"]
             )
