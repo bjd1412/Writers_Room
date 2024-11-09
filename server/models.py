@@ -55,7 +55,8 @@ class Story(db.Model, SerializerMixin):
   
    serialize_rules = ("-comments.story",)  
   
-   id = db.Column(db.Integer, primary_key=True)  
+   id = db.Column(db.Integer, primary_key=True) 
+   image = db.Column(db.String) 
    title = db.Column(db.String)  
    story = db.Column(db.String)  
    created_at = db.Column(db.DateTime, server_default=db.func.now())  

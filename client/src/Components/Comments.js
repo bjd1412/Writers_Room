@@ -1,48 +1,36 @@
-
 import React, { useState, useEffect } from 'react';  
 import CommentList from './CommentList';  
 import StoryContext from './StoryContext';  
 import { useContext } from 'react';  
   
 function Comments({ storyId }) {  
-    const { comments } = useContext(StoryContext);  
-    const [loading, setLoading] = useState(true);  
-    const [filteredComments, setFilteredComments] = useState([]);  
-    
-    useEffect(() => {  
-     if (comments && comments.length > 0) {  
-      setLoading(false);  
-     }  
-    }, [comments]);  
-    
-    useEffect(() => {  
-     fetch(`/comments/by-story/${storyId}`)  
-      .then(response => response.json())  
-      .then(data => {  
-        console.log('data:', data);  
-        setFilteredComments(data);  
-      });  
-    }, [storyId]);  
-    
-    if (loading) {  
-     return <div>Loading comments...</div>;  
-    }  
-    
-    return (  
-     <div className="commentSection">  
-      {filteredComments && filteredComments.length > 0 ? (  
-        filteredComments.map(comm => (  
-         <CommentList  
-          key={comm.id}  
-          comment={comm.comment}  
-          created_at={comm.created_at}  
-         />  
-        ))  
-      ) : (  
-        <p>No comments available for this story.</p>  
-      )}  
-     </div>  
-    );  
-  }
+  const { comments } = useContext(StoryContext);  
+  const [filteredComments, setFilteredComments] = useState([]);  
+  
+  useEffect(() => {  
+   console.log('comments:', comments);  
+   console.log('storyId:', storyId);  
+   if (comments && comments.length > 0) {  
+    const filteredComments = comments.filter(comment => comment.story_id === parseInt(storyId));  
+    setFilteredComments(filteredComments);  
+   }  
+  }, [comments, storyId]);  
+  
+  if (filteredComments.length === 0) {  
+   return <p>No comments available for this story.</p>;  
+  }  
+  
+  return (  
+   <div className="commentSection">  
+    {filteredComments.map(comm => (  
+      <CommentList  
+       key={comm.id}  
+       comment={comm.comment}  
+       created_at={comm.created_at}  
+      />  
+    ))}  
+   </div>  
+  );  
+}  
   
 export default Comments;

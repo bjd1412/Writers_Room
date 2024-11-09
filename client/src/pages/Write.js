@@ -8,6 +8,7 @@ function Write() {
   const { handleSubmit } = useContext(StoryContext);  
   
   const initialValues = {  
+   image: '', 
    title: '',  
    story: '',  
   };  
@@ -18,7 +19,8 @@ function Write() {
   });  
   
   const onSubmit = (values, { setSubmitting }) => {  
-   const formData = new FormData();  
+   const formData = new FormData();
+   formData.append('image', values.image);  
    formData.append('title', values.title);  
    formData.append('story', values.story);  
   
@@ -53,7 +55,10 @@ function Write() {
       onSubmit={onSubmit}  
     >  
       {({ isSubmitting }) => (  
-       <Form className="NewWrite">  
+       <Form className="NewWrite">
+        <label className="Label">Add Image</label>
+        <Field type="text" name="image" placeholder="Add Image"/>
+        <ErrorMessage name="image" component="div"/>  
         <label className="Label">Title</label>  
         <Field type="text" name="title" placeholder="Title..." />  
         <ErrorMessage name="title" component="div" />  

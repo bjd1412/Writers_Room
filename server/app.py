@@ -102,6 +102,7 @@ class Stories(Resource):
         data = request.form
         try:
             new_story = Story(
+            image=data["image"],
             title=data["title"],
             story=data["story"]
             )
@@ -154,7 +155,7 @@ class Comments(Resource):
    def post(self):  
       data = request.form  
       try:  
-        new_comment = Comment(comment=data["comment"])  
+        new_comment = Comment(comment=data["comment"], story_id=data["story_id"])  
       except:  
         return make_response({"Error": "Validation Error"}, 400)  
       db.session.add(new_comment)  

@@ -23,11 +23,10 @@ function App() {
 
   function handleSubmit(newWrite){
     setStories([...stories, newWrite])
+  }
 
   function handleSubmitComments(newComment){
     setComments([...comments, newComment])
-  }
-
   }
   return (
     <div className="App">
