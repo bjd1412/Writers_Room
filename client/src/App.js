@@ -8,6 +8,7 @@ import StoryContext from './Components/StoryContext';
 function App() {
   const [stories, setStories] = useState([])
   const [comments, setComments] = useState([])
+  const [username, setUsername] = useState([])
 
   useEffect(() => {
     fetch("/stories")
@@ -21,6 +22,12 @@ function App() {
     .then(res => setComments(res))
   }, [])
 
+  useEffect(() => {
+    fetch("/users")
+    .then(res => res.json())
+    .then(res => setUsername(res))
+  }, [])
+
   function handleSubmit(newWrite){
     setStories([...stories, newWrite])
   }
@@ -28,11 +35,14 @@ function App() {
   function handleSubmitComments(newComment){
     setComments([...comments, newComment])
   }
+  function handleSubmitUser(newUser){
+    setUsername([...username, newUser])
+  }
   return (
     <div className="App">
       <NavBar/>
       <header className="App-header">
-      <StoryContext.Provider value={{stories, setStories, comments, setComments, handleSubmit, handleSubmitComments}}>
+      <StoryContext.Provider value={{stories, setStories, comments, setComments, username, setUsername, handleSubmit, handleSubmitUser, handleSubmitComments}}>
         <Outlet/>
       </StoryContext.Provider>    
       </header>

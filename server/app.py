@@ -52,6 +52,12 @@ class Users(Resource):
         db.session.commit()
         return make_response(new_user.to_dict(), 200)
 
+class Username(Resource):
+
+    def get(self, username):
+        username = User.query.filter(User.username==username).first()
+        return make_response([user.to_dict() for user in username], 200)
+
 
 class User_ID(Resource):
     
@@ -85,6 +91,17 @@ class User_ID(Resource):
             return make_response("", 204)
         else:
             return make_response({"Error": "User not found"}, 404)
+
+class Login(Resource):
+
+    def post(self):
+        data = request.form["username"]
+        user = User.query.filter(User.username==data).first()
+        if user:
+            session['user_id'] = user.id
+            return make_response(user.to_dict(), 200)
+        else:
+            return make_response({"Error": "User not found"})
 
 
 
@@ -160,7 +177,9 @@ class Comments(Resource):
         return make_response({"Error": "Validation Error"}, 400)  
       db.session.add(new_comment)  
       db.session.commit()  
-      return make_response(new_comment.to_dict(), 200)  
+      return make_response(new_comment.to_dict(), 200)
+
+      
   
 class CommentResource(Resource):  
    def get(self, id):  
@@ -185,12 +204,12 @@ class CommentResource(Resource):
         return make_response({"Error": "Comment not found"}, 404)  
   
    def delete(self, id):  
-      comment = Comment.query.filter(Comment.id==id).first()  
-      if comment:  
+    comment = Comment.query.filter(Comment.id==id).first()  
+    if comment:  
         db.session.delete(comment)  
         db.session.commit()  
-        return make_response("", 204)  
-      else:  
+        return make_response({"message": "Comment deleted successfully"}, 200)  
+    else:  
         return make_response({"Error": "Comment not found"}, 404)  
   
 class CommentsByStoryID(Resource):  
@@ -199,7 +218,9 @@ class CommentsByStoryID(Resource):
       return make_response([comment.to_dict() for comment in comments], 200)  
   
 api.add_resource(Users, '/users')  
-api.add_resource(User_ID, '/users/<int:id>')  
+api.add_resource(User_ID, '/users/<int:id>')
+api.add_resource(Username, '/users/<string:username>') 
+# api.add_resource(Login, '/login') 
 api.add_resource(Story_ID, '/stories/<int:id>')  
 api.add_resource(Stories, '/stories')  
 api.add_resource(Comments, '/comments')  

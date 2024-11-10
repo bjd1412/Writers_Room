@@ -4,8 +4,10 @@ import Login from "./pages/Login";
 import Stories from "./pages/Stories";
 import Explore from "./pages/Explore";
 import Write from "./pages/Write";
-import Profile from "./pages/Profile"
+import Account from "./pages/Account"
 import ErrorPage from "./pages/ErrorPage"
+import Register from "./pages/Register";
+
 
 const routes = [
     {
@@ -26,6 +28,10 @@ const routes = [
             element: <Login/>
         },
         {
+            path: "/register",
+            element:<Register/>
+        },
+        {
             path: "/write",
             element: <Write/>
         },
@@ -34,8 +40,8 @@ const routes = [
             element: <Stories/>
         },
         {  
-            path: "/profile/:username",  
-            element: <Profile/>  
+            path: "/account/:username",  
+            element: <Account/>  
         },
         ]
     }

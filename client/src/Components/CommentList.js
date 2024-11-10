@@ -3,9 +3,10 @@ import React from "react";
 
 function CommentList({comment, created_at}) {
 
+    
     return (
-        <div>
-            <ul>{comment}</ul>
+        <div className="comment">
+            <p>{comment}</p>
             <small>{new Date(created_at).toLocaleString()}</small>
     
         </div>
