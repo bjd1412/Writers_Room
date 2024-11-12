@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 import NavBar from './Components/NavBar';
 import {useEffect, useState} from 'react';
 import StoryContext from './Components/StoryContext';
+import Logout from './Components/Logout';
 
 function App() {
   const [stories, setStories] = useState([])
@@ -40,11 +41,13 @@ function App() {
     setUsername([...username, newUser])
   }
 
-  const handleLogout = () => {
+  function handleLogout(){
     setUser(null)
   }
+  
   return (
     <div className="App">
+
       <NavBar/>
       <header className="App-header">
       <StoryContext.Provider value={{stories, setStories, comments, setComments, username, setUsername, user, setUser, handleSubmit, handleSubmitUser, handleSubmitComments, handleLogout}}>
