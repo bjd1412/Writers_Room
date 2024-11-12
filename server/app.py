@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from models import db, User, Story, Comment
-from flask import Flask, request, make_response, jsonify
+from flask import Flask, session, request, make_response, jsonify
 from flask_restful import Api, Resource
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -10,6 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = '1412'
 app.json.compact = False
 
 migrate = Migrate(app, db)
@@ -92,16 +93,38 @@ class User_ID(Resource):
         else:
             return make_response({"Error": "User not found"}, 404)
 
-class Login(Resource):
+class Login(Resource):  
+   def post(self):  
+      try:  
+        data = request.form  
+        username = data["username"]  
+        password = data["password"]  
+        user = User.query.filter(User.username==username).first()  
+        if user and user.password == password:  
+           session['user_id'] = user.id  
+           return make_response(user.to_dict(), 200)  
+        else:  
+           return make_response({"Error": "Invalid username or password"}, 401)  
+      except Exception as e:  
+        print(e)  # Print the error message to the console  
+        return make_response({"Error": str(e)}, 500)
 
-    def post(self):
-        data = request.form["username"]
-        user = User.query.filter(User.username==data).first()
-        if user:
-            session['user_id'] = user.id
+class Logout(Resource):
+
+    def delete(self):
+        if 'user_id' in session:
+            session['user_id'] = None 
+            return make_response({'message': 'Successfully logged out'}, 204)
+            
+class CheckSession(Resource):
+
+    def get(self):
+        if 'user_id' in session:
+            user = User.query.get(session['user_id'])
             return make_response(user.to_dict(), 200)
         else:
-            return make_response({"Error": "User not found"})
+            return make_response({"Error": "Not logged in"}, 401)
+        
 
 
 
@@ -169,15 +192,17 @@ class Comments(Resource):
       comments = Comment.query.all()  
       return make_response([comment.to_dict() for comment in comments], 200)  
   
-   def post(self):  
-      data = request.form  
-      try:  
-        new_comment = Comment(comment=data["comment"], story_id=data["story_id"])  
-      except:  
+   def post(self):
+    if 'user_id' not in session:
+        return make_response({"Error": "Not logged in"}, 401)
+    data = request.form  
+    try:  
+        new_comment = Comment(comment=data["comment"], story_id=data["story_id"], user_id=session['user_id'])  
+    except:  
         return make_response({"Error": "Validation Error"}, 400)  
-      db.session.add(new_comment)  
-      db.session.commit()  
-      return make_response(new_comment.to_dict(), 200)
+    db.session.add(new_comment)  
+    db.session.commit()  
+    return make_response(new_comment.to_dict(), 200)
 
       
   
@@ -220,7 +245,9 @@ class CommentsByStoryID(Resource):
 api.add_resource(Users, '/users')  
 api.add_resource(User_ID, '/users/<int:id>')
 api.add_resource(Username, '/users/<string:username>') 
-# api.add_resource(Login, '/login') 
+api.add_resource(CheckSession, '/check_session')
+api.add_resource(Login, '/login')
+api.add_resource(Logout, '/logout') 
 api.add_resource(Story_ID, '/stories/<int:id>')  
 api.add_resource(Stories, '/stories')  
 api.add_resource(Comments, '/comments')  

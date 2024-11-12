@@ -9,6 +9,7 @@ function App() {
   const [stories, setStories] = useState([])
   const [comments, setComments] = useState([])
   const [username, setUsername] = useState([])
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     fetch("/stories")
@@ -38,11 +39,15 @@ function App() {
   function handleSubmitUser(newUser){
     setUsername([...username, newUser])
   }
+
+  const handleLogout = () => {
+    setUser(null)
+  }
   return (
     <div className="App">
       <NavBar/>
       <header className="App-header">
-      <StoryContext.Provider value={{stories, setStories, comments, setComments, username, setUsername, handleSubmit, handleSubmitUser, handleSubmitComments}}>
+      <StoryContext.Provider value={{stories, setStories, comments, setComments, username, setUsername, user, setUser, handleSubmit, handleSubmitUser, handleSubmitComments, handleLogout}}>
         <Outlet/>
       </StoryContext.Provider>    
       </header>
