@@ -125,9 +125,6 @@ class CheckSession(Resource):
         else:
             return make_response({"Error": "Not logged in"}, 401)
         
-
-
-
 class Stories(Resource):
 
     def get(self):
@@ -138,19 +135,31 @@ class Stories(Resource):
             stories.append(story_dict)
         return make_response(stories, 200)
 
-    def post(self):
-        data = request.form
-        try:
-            new_story = Story(
-            image=data["image"],
-            title=data["title"],
-            story=data["story"]
-            )
-        except:
-            return make_response({"Error": "Validation Error"}, 400)
-        db.session.add(new_story)
-        db.session.commit()
-        return make_response(new_story.to_dict(), 200)
+    def post(self):  
+        if 'user_id' not in session:  
+            return make_response({"Error": "Not logged in"}, 401)  
+        data = request.form  
+        try:  
+            new_story = Story(  
+                image=data["image"],  
+                title=data["title"],  
+                story=data["story"]  
+            )  
+            db.session.add(new_story)  
+            db.session.commit()  
+  
+            user = User.query.get(session["user_id"])  
+            user.append_story(new_story)  
+            db.session.commit()  
+  
+            return make_response(new_story.to_dict(), 200)  
+        except Exception as e:  
+            return make_response({"Error": str(e)}, 400)
+
+        
+
+
+
 
 
 class Story_ID(Resource):
@@ -185,7 +194,15 @@ class Story_ID(Resource):
         else:
             return make_response({"Error": "Story does not exist"}, 404)
         
+class StoriesByUser(Resource):
 
+    def get(self, username):
+        user = User.query.filter(User.username==username).first()
+        if user:
+            stories = Story.query.join(Comment).filter(Comment.user_id==user.id).all()
+            return make_response([story.to_dict() for story in stories], 200)
+        else:
+            return make_response({"Error": "User not found"}, 404)
 
 class Comments(Resource):  
    def get(self):  
@@ -228,14 +245,18 @@ class CommentResource(Resource):
       else:  
         return make_response({"Error": "Comment not found"}, 404)  
   
-   def delete(self, id):  
+   def delete(self, id):
+
     comment = Comment.query.filter(Comment.id==id).first()  
     if comment:  
-        db.session.delete(comment)  
+      if 'user_id' in session and comment.user_id == session['user_id']:  
+        db.session.query(Comment).filter(Comment.id==id).delete()  
         db.session.commit()  
         return make_response({"message": "Comment deleted successfully"}, 200)  
+      else:  
+        return make_response({"Error": "Not Authorized to delete this comment"}, 401)  
     else:  
-        return make_response({"Error": "Comment not found"}, 404)  
+      return make_response({"Error": "Comment not found."}, 404)
   
 class CommentsByStoryID(Resource):  
    def get(self, story_id):  
@@ -248,7 +269,8 @@ api.add_resource(Username, '/users/<string:username>')
 api.add_resource(CheckSession, '/check_session')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout') 
-api.add_resource(Story_ID, '/stories/<int:id>')  
+api.add_resource(Story_ID, '/stories/<int:id>')
+api.add_resource(StoriesByUser, '/stories/by-user/<string:username>')  
 api.add_resource(Stories, '/stories')  
 api.add_resource(Comments, '/comments')  
 api.add_resource(CommentResource, '/comments/<int:id>')  

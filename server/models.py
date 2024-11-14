@@ -26,8 +26,9 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
 
+ 
+    stories = db.relationship("Story", back_populates="user", cascade="all, delete-orphan")
     comments = db.relationship("Comment", back_populates="user", cascade="all, delete-orphan")
-    stories = association_proxy("comments", "story", creator=lambda story_obj: Story(story=story_obj) )
 
     @validates("username")
     def validate_username(self, key, username):
@@ -58,12 +59,14 @@ class Story(db.Model, SerializerMixin):
    id = db.Column(db.Integer, primary_key=True) 
    image = db.Column(db.String) 
    title = db.Column(db.String)  
-   story = db.Column(db.String)  
+   story = db.Column(db.String)
+   user_id = db.Column(db.Integer, db.ForeignKey("users.id")) 
    created_at = db.Column(db.DateTime, server_default=db.func.now())  
    updated_at = db.Column(db.DateTime, onupdate=db.func.now())  
-  
+
+   user = db.relationship("User", back_populates="stories")
    comments = db.relationship("Comment", back_populates='story', cascade="all, delete-orphan")  
-   user = association_proxy("comments", "user", creator=lambda user_obj: User(user=user_obj))  
+  
   
    @validates("title")  
    def validate_title(self, key, title):  
