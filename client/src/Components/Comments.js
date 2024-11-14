@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect } from 'react';  
 import CommentList from './CommentList';  
 import StoryContext from './StoryContext';  
 import { useContext } from 'react';  
   
 function Comments({ storyId }) {  
-  const { comments } = useContext(StoryContext);  
+  const { currentUser, comments, setComments, users } = useContext(StoryContext);  
   const [filteredComments, setFilteredComments] = useState([]);  
   
   useEffect(() => {  
@@ -20,6 +21,23 @@ function Comments({ storyId }) {
    return <p>No comments available for this story.</p>;  
   }  
   
+  const handleDeleteComment = (commentId) => {  
+   fetch(`/comments/${commentId}`, {  
+    method: "DELETE",  
+   })  
+    .then(res => {  
+      if (res.ok) {  
+       const updatedComments = comments.filter(comment => comment.id !== commentId);  
+       setComments(updatedComments);  
+      } else {  
+       throw new Error(res.statusText)  
+      }  
+    })  
+    .catch(error => {  
+      console.error('Error:', error);  
+    });  
+  }  
+  
   return (  
    <div className="commentSection">  
     {filteredComments.map(comm => (  
@@ -27,6 +45,10 @@ function Comments({ storyId }) {
        key={comm.id}  
        comment={comm.comment}  
        created_at={comm.created_at}  
+       user_id={comm.user_id}
+       username={users}  
+       user={currentUser}  
+       handleDeleteClick={() => handleDeleteComment(comm.id)}  
       />  
     ))}  
    </div>  
