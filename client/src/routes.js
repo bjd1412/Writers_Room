@@ -43,6 +43,10 @@ const routes = [
             path: "/account/:username",  
             element: <Account/>  
         },
+        {
+            path:"/write/:id",
+            element: <Write/>
+        },
         ]
     }
 ]

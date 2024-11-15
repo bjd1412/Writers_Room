@@ -177,18 +177,24 @@ class Story_ID(Resource):
 
 
     def patch(self, id):
-    story = Story.query.filter(Story.id==id).first()
-    data = request.form
-    if data:
-        try:
-            for attr in data:
-                setattr(story, attr, data[attr])
-            db.session.commit()
-            return make_response(story.to_dict(), 202)
-        except:
-            return make_response({"Error": "Validation Error"}, 400)
-        else:
-            return make_response({"Error: Story does not exist"}, 404)
+
+        story = Story.query.filter(Story.id==id).first()  
+        if story:  
+            data = request.form  
+            if data:
+                try:
+                    for attr in data:  
+                        if attr == 'story' and not data[attr]:  
+                            return make_response({"Error": "Story cannot be empty"}, 400)  
+                        setattr(story, attr, data[attr])  
+                    db.session.commit()  
+                    return make_response(story.to_dict(rules=("-comments",)), 202)  
+                except:  
+                    return make_response({"Error": "Validation Error"}, 400)  
+            else:  
+                return make_response({"Error: No Data Provided"}, 400)  
+        else:  
+            return make_response({"Error": "Story Does Not Exist"}, 404)
 
     def delete(self, id):
         story = Story.query.filter(Story.id == id).first()
