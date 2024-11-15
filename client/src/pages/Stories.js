@@ -10,18 +10,27 @@ function Stories (){
     const storyId = params.id
     const {comments} = useContext(StoryContext)
 
-    useEffect(() => {
-        fetch(`/stories/${storyId}`)
-        .then(res => res.json())
-        .then(res => setStory(res))
-
-    }, [storyId])
+    useEffect(() => {  
+        fetch(`/stories/${storyId}`)  
+         .then(res => res.json())  
+         .then(res => {  
+          const story = {  
+            id: res.id,  
+            image: res.image,  
+            title: res.title,  
+            story: res.story,  
+            user: res.user  
+          };  
+          setStory(story);  
+         });  
+      }, [storyId]);
 
     return (
         <div className="MainStory">
             <img src={story.image}/>
             <h2>{story.title}</h2>
             <p>{story.story}</p>
+            <p>By: {story.user && story.user.username}</p>
             <AddComment storyId={storyId}/>
             <Comments storyId={storyId} comment={comments}/>
             

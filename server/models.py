@@ -19,7 +19,7 @@ db = SQLAlchemy(metadata=metadata)
 class User(db.Model, SerializerMixin):
     __tablename__="users"
 
-    serialize_rules = ("-comments.user",)
+    serialize_rules = ("-comments",)
 
 
     id = db.Column(db.Integer, primary_key=True)
@@ -65,7 +65,7 @@ class Story(db.Model, SerializerMixin):
    updated_at = db.Column(db.DateTime, onupdate=db.func.now())  
 
    user = db.relationship("User", back_populates="stories")
-   comments = db.relationship("Comment", back_populates='story', cascade="all, delete-orphan")  
+   comments = db.relationship("Comment", back_populates='stories', cascade="all, delete-orphan")  
   
   
    @validates("title")  
@@ -89,7 +89,7 @@ class Story(db.Model, SerializerMixin):
 class Comment(db.Model, SerializerMixin):
     __tablename__="comments"
 
-    serialize_rules = ("-user.comments", "-story.comments", "story_id",)
+    serialize_rules = ("-user.comments", "-story.comments", "story_id", "-stories",)
 
     id = db.Column(db.Integer, primary_key=True)
     comment = db.Column(db.String)
@@ -99,7 +99,7 @@ class Comment(db.Model, SerializerMixin):
     story_id = db.Column(db.Integer, db.ForeignKey("stories.id"))
 
     user = db.relationship("User", back_populates='comments', cascade="all")
-    story = db.relationship("Story", back_populates="comments", cascade="all")
+    stories = db.relationship("Story", back_populates="comments", cascade="all")
     
 
     @validates("comment")
