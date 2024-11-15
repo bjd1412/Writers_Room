@@ -32,8 +32,8 @@ if __name__ == '__main__':
         db.session.add_all([s1, s2])
         db.session.commit()
 
-        c1 = Comment(comment="Great Poem!", created_at=datetime.datetime(2024, 2, 13), story=s1, user=J2)
-        c2 = Comment(comment="Good story", created_at=datetime.datetime(2024, 1, 15), story=s2, user=W3)
+        c1 = Comment(comment="Great Poem!", created_at=datetime.datetime(2024, 2, 13), stories=s1, user=J2)
+        c2 = Comment(comment="Good story", created_at=datetime.datetime(2024, 1, 15), stories=s2, user=W3)
         db.session.add_all([c1, c2])
         db.session.commit()
 

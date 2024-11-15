@@ -54,7 +54,7 @@ class User(db.Model, SerializerMixin):
 class Story(db.Model, SerializerMixin):  
    __tablename__="stories"  
   
-   serialize_rules = ("-comments.story",)  
+   serialize_rules = ("-comments","-user",)  
   
    id = db.Column(db.Integer, primary_key=True) 
    image = db.Column(db.String) 

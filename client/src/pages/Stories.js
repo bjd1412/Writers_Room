@@ -30,7 +30,7 @@ function Stories (){
             <img src={story.image}/>
             <h2>{story.title}</h2>
             <p>{story.story}</p>
-            <p>By: {story.user && story.user.username}</p>
+            {story.user && story.user.username && <p>By: {story.user.username}</p>}
             <AddComment storyId={storyId}/>
             <Comments storyId={storyId} comment={comments}/>
             

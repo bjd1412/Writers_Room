@@ -56,11 +56,14 @@ class Users(Resource):
 class Username(Resource):
 
     def get(self, username):
-        user = User.query.filter(User.username==username).first()
-        if user:
-            return make_response(user.to_dict(), 200)
+        if username and username != "null":
+            user = User.query.filter(User.username==username).first()
+            if user:
+                return make_response(user.to_dict(), 200)
+            else:
+                return make_response({"Error": "User not found"}, 404)
         else:
-            return make_response({"Error": "User not found"}, 404)
+            return make_response({"Error": "Invalid Username"}, 400)
 
 
 class User_ID(Resource):
@@ -103,9 +106,9 @@ class Login(Resource):
         username = data["username"]  
         password = data["password"]  
         user = User.query.filter(User.username==username).first()  
-        if user and user.password == password:  
-           session['user_id'] = user.id  
-           return make_response(user.to_dict(rules=("-stories",)), 200)  
+        if user and user.password == password:
+            session['user_id'] = user.id
+            return make_response(user.to_dict(rules=("-stories",)), 200) 
         else:  
            return make_response({"Error": "Invalid username or password"}, 401)  
       except Exception as e:  
@@ -156,7 +159,8 @@ class Stories(Resource):
         db.session.add(new_story)   
         db.session.commit()   
         return make_response(new_story.to_dict(rules=("-comments",)), 200)   
-      except Exception as e:   
+      except Exception as e:
+        print(e)   
         return make_response({"Error": str(e)}, 400)  
   
 class Story_ID(Resource):  
@@ -164,11 +168,35 @@ class Story_ID(Resource):
     def get(self, id):
         story = Story.query.filter(Story.id == id).first()  
         if story:  
-            story_dict = story.to_dict(rules=("-comments",))  
-            if story.user:  
-                story_dict["user"] = story.user.to_dict(rules=("-stories",))  
+            story_dict = story.to_dict(rules=("-comments",))
+            if story.user:
+                story_dict["user"] = story.user.to_dict(rules=("-stories",))    
             return make_response(story_dict, 200)  
         else:  
+            return make_response({"Error": "Story does not exist"}, 404)
+
+
+    def patch(self, id):
+    story = Story.query.filter(Story.id==id).first()
+    data = request.form
+    if data:
+        try:
+            for attr in data:
+                setattr(story, attr, data[attr])
+            db.session.commit()
+            return make_response(story.to_dict(), 202)
+        except:
+            return make_response({"Error": "Validation Error"}, 400)
+        else:
+            return make_response({"Error: Story does not exist"}, 404)
+
+    def delete(self, id):
+        story = Story.query.filter(Story.id == id).first()
+        if story:
+            db.session.delete(story)
+            db.session.commit()
+            return make_response("", 204)
+        else:
             return make_response({"Error": "Story does not exist"}, 404)
   
 class StoriesByUser(Resource):
@@ -179,7 +207,7 @@ class StoriesByUser(Resource):
         user = User.query.filter(User.username==username).first()  
         if user:  
             stories = Story.query.filter(Story.user_id==user.id).all()  
-            return make_response([story.to_dict(rules=("-user",)) for story in stories], 200)  
+            return make_response([story.to_dict(rules=("-user","-comments")) for story in stories], 200)  
         else:  
             return make_response({"Error": "User not found"}, 404)  
   
@@ -193,14 +221,15 @@ class Comments(Resource):
     def post(self):  
         if 'user_id' not in session:  
             return make_response({"Error": "Not logged in"}, 401)  
-            data = request.form   
-            try:   
-                new_comment = Comment(comment=data["comment"], story_id=data["story_id"], user_id=session['user_id'])   
-            except:   
-                return make_response({"Error": "Validation Error"}, 400)   
-        db.session.add(new_comment)   
-        db.session.commit()   
-        return make_response(new_comment.to_dict(rules=("-stories",)), 200)
+        data = request.form   
+        try:   
+            new_comment = Comment(comment=data["comment"], story_id=data["story_id"], user_id=session['user_id'])
+            db.session.add(new_comment)   
+            db.session.commit()
+            return make_response(new_comment.to_dict(rules=("-stories",)), 200)
+        except:   
+            return make_response({"Error": "Validation Error"}, 400)   
+        
 
       
   

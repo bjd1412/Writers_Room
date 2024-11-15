@@ -6,11 +6,13 @@ import { useState, useEffect } from "react";
 function CommentList({ comment, created_at, user_id, handleDeleteClick }) {  
   const [user, setUser] = useState(null);  
   
-  useEffect(() => {  
-   fetch(`/users/${user_id}`)  
-    .then(response => response.json())  
-    .then(data => setUser(data));  
-  }, [user_id]);  
+  useEffect(() => {   
+    if (user_id !== null) {  
+     fetch(`/users/${user_id}`)   
+       .then(response => response.json())   
+       .then(data => setUser(data));   
+    }  
+   }, [user_id]);  
   
   return (  
    <div>  
