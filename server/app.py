@@ -127,7 +127,7 @@ class CheckSession(Resource):
    def get(self):
 
     if 'user_id' in session:  
-        user = User.query.get(session['user_id'])  
+        user = db.session.get(User, session['user_id'])  
         if user:  
             return make_response(user.to_dict(), 200)  
         else:  

@@ -1,6 +1,6 @@
 
 import './App.css';  
-import { Outlet } from 'react-router-dom';  
+import { Outlet, useNavigate } from 'react-router-dom';  
 import NavBar from './Components/NavBar';  
 import {useEffect, useState} from 'react';  
 import StoryContext from './Components/StoryContext';  
@@ -11,7 +11,8 @@ function App() {
   const [username, setUsername] = useState([])  
   const [user, setUser] = useState(null)  
   const [currentUser, setCurrentUser] = useState(null)  
-  const [users, setUsers] = useState({})  
+  const [users, setUsers] = useState({})
+  const navigate = useNavigate()  
   
   useEffect(() => {  
    fetch("/stories")  
@@ -31,18 +32,20 @@ function App() {
    .then(res => setUsername(res))  
   }, [])  
   
-  useEffect(() => {   
-   fetch("/check_session")   
-   .then(res => res.json())   
-   .then(res => {
-    console.log('User session:', res )   
-    if (res) {   
-    setUser(res);   
-    } else {   
-    setUser(null);   
-    }   
-   })   
-  }, [])  
+  useEffect(() => {  
+    fetch("/check_session")  
+     .then(res => res.json())  
+     .then(res => {  
+      console.log('User session:', res)  
+      if (res) {  
+        setUser(res);  
+        setCurrentUser(res);   
+      } else {  
+        setUser(null);  
+        setCurrentUser(null);   
+      }  
+     })  
+  }, []); 
   
   useEffect(() => {  
    if (comments.length > 0) {  
@@ -72,7 +75,9 @@ function App() {
   }  
   
   function handleLogout(){  
-   setUser(null)  
+   setUser(null)
+   setCurrentUser(null)
+   navigate('/')  
   }  
   
   function handleLogin(newUser) {
