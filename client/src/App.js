@@ -34,7 +34,8 @@ function App() {
   useEffect(() => {   
    fetch("/check_session")   
    .then(res => res.json())   
-   .then(res => {   
+   .then(res => {
+    console.log('User session:', res )   
     if (res) {   
     setUser(res);   
     } else {   
@@ -74,7 +75,8 @@ function App() {
    setUser(null)  
   }  
   
-  function handleLogin(newUser) {  
+  function handleLogin(newUser) {
+    setUser(newUser)  
    setCurrentUser(newUser)  
   }  
    

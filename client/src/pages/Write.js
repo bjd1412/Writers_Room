@@ -1,27 +1,31 @@
 
 
+
 import React, { useState, useEffect } from 'react';  
 import { Formik, Form, Field, ErrorMessage } from 'formik';  
 import StoryContext from "../Components/StoryContext";  
 import { useContext } from "react";  
 import * as Yup from 'yup';  
-import { useParams } from 'react-router-dom';  
+import { useParams, useNavigate } from 'react-router-dom';  
   
 function Write() {  
   const { id } = useParams();  
-  const { handleSubmit } = useContext(StoryContext);  
+  const { handleSubmit, user } = useContext(StoryContext);  
+  const navigate = useNavigate();  
   const [initialValues, setInitialValues] = useState({  
    image: '',  
    title: '',  
    story: '',  
   });  
   const [isLoaded, setIsLoaded] = useState(false);  
+  const [story, setStory] = useState(null);  
   
   useEffect(() => {  
    if (id) {  
     fetch(`/stories/${id}`)  
       .then((response) => response.json())  
       .then((story) => {  
+       setStory(story);  
        setInitialValues({  
         image: story.image,  
         title: story.title,  
@@ -33,6 +37,14 @@ function Write() {
     setIsLoaded(true);  
    }  
   }, [id]);  
+  
+  useEffect(() => {  
+   if (!user) {  
+    navigate('/login');  
+   } else if (id && story && story.user_id !== user.id) {  
+    navigate('/login');  
+   }  
+  }, [user, id, story]);  
   
   const validationSchema = Yup.object().shape({  
    title: Yup.string().required('Title is required'),  
@@ -106,4 +118,4 @@ function Write() {
   );  
 }  
   
-export default Write;
+export default Write
