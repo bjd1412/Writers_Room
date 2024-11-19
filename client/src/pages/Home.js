@@ -4,7 +4,6 @@ function Home () {
     
     return(
         <div className="Main">
-            <Logout/>
             <h1>Welcome to the Writer's Corner</h1>
         </div>
     )

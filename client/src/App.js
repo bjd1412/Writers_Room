@@ -80,16 +80,15 @@ function App() {
    setCurrentUser(newUser)  
   }  
    
-  return (  
+  return (
+    <StoryContext.Provider value={{stories, setStories, comments, setComments, username, setUsername, user, setUser, currentUser, setCurrentUser, users, setUsers, handleSubmit, handleSubmitUser, handleSubmitComments, handleLogout, handleLogin}}>    
    <div className="App">  
-  
     <NavBar/>  
-    <header className="App-header">  
-    <StoryContext.Provider value={{stories, setStories, comments, setComments, username, setUsername, user, setUser, currentUser, setCurrentUser, users, setUsers, handleSubmit, handleSubmitUser, handleSubmitComments, handleLogout, handleLogin}}>  
-      <Outlet/>  
-    </StoryContext.Provider>    
+    <header className="App-header">    
+      <Outlet/>      
     </header>  
-   </div>  
+   </div>
+   </StoryContext.Provider>   
   );  
 }  
   

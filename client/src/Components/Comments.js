@@ -45,9 +45,8 @@ function Comments({ storyId }) {
        key={comm.id}  
        comment={comm.comment}  
        created_at={comm.created_at}  
-       user_id={comm.user_id}
-       username={users}  
-       user={currentUser}  
+       user_id={comm.user_id} 
+       currentUser={currentUser}  
        handleDeleteClick={() => handleDeleteComment(comm.id)}  
       />  
     ))}  
