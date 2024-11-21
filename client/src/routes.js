@@ -7,13 +7,18 @@ import Write from "./pages/Write";
 import Account from "./pages/Account"
 import ErrorPage from "./pages/ErrorPage"
 import Register from "./pages/Register";
+import StoryContext from "./Components/StoryContext";
 
 
 const routes = [
     {
         path: '/',
         element: <App/>,
-        errorElement: <ErrorPage/>,
+        errorElement: (
+            <StoryContext.Provider value={{user: null, currentUser: null}}>
+                <ErrorPage/>
+            </StoryContext.Provider>
+        ),
         children: [
             {
             path: "/",

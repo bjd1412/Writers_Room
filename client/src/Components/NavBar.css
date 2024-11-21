@@ -1,0 +1,62 @@
+.NavBar {  
+    position: fixed; /* make the navbar fixed */  
+    top: 0; /* position the navbar at the top of the page */  
+    left: 0; /* position the navbar at the left of the page */  
+    width: 100%; /* make the navbar full-width */  
+    background-color: rgba(0, 0, 0, 0.596);  
+    color: #000000;  
+    padding: 10px;  
+    border-bottom: 1px solid #ccc;  
+    display: flex;  
+    justify-content: center;
+    align-items: center;  
+  }
+  
+  .NavBarLogo {  
+    width: 1000px; /* adjust the width to your liking */  
+    height: 50px; /* adjust the height to your liking */  
+    object-fit: contain; /* make the image fit within the navbar */  
+    margin: 0 10px; /* add some margin to the image */  
+  }
+    
+  .NavBar a {  
+    background-color: rgba(255, 255, 255, 0.5);  
+    color: #000000;  
+    padding: 10px 10px; /* reduce the padding to make the buttons closer together */  
+    border: 1px solid #ccc;  
+    border-radius: 5px;  
+    margin: 0 2px; /* reduce the margin to make the buttons closer together */  
+    text-decoration: none;  
+  }  
+    
+  .NavBar a:first-child, .NavBar a:nth-child(2), .NavBar a:nth-child(3) {  
+    margin-right: 5px; /* add a smaller margin to the right of the first three buttons */  
+  }
+    
+  .account-login-container {  
+    display: flex;  
+    align-items: center;  
+    margin: 0 5px;  
+    width: 200px; /* add a fixed width to the container */
+    margin-left: auto;  
+  }
+    
+  .logout-button {  
+    background-color: rgba(255, 255, 255, 0.5);  
+    color: #000000;  
+    padding: 10px 15px;  
+    border: 1px solid #ccc;  
+    border-radius: 5px;  
+    text-decoration: none;  
+    margin: 0 5px;  
+  }  
+    
+  .login-button {  
+    background-color: rgba(173, 216, 230, 0.5);  
+    color: #000000;  
+    padding: 10px 15px;  
+    border: 1px solid #ccc;  
+    border-radius: 5px;  
+    text-decoration: none;  
+    margin: 0 5px;  
+  }

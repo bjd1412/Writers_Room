@@ -18,7 +18,9 @@ function Write() {
    story: '',  
   });  
   const [isLoaded, setIsLoaded] = useState(false);  
-  const [story, setStory] = useState(null);  
+  const [story, setStory] = useState(null);
+  
+
   
   useEffect(() => {  
    if (id) {  
@@ -64,7 +66,8 @@ function Write() {
     })  
       .then((response) => response.json())  
       .then((data) => {  
-       setSubmitting(false);  
+       setSubmitting(false);
+       navigate(`/account/${user.username}`)  
       })  
       .catch((error) => {  
        console.error(error);  
@@ -78,7 +81,8 @@ function Write() {
       .then((response) => response.json())  
       .then((data) => {  
        handleSubmit(data);  
-       setSubmitting(false);  
+       setSubmitting(false);
+       navigate('/explore')  
       })  
       .catch((error) => {  
        console.error(error);  
@@ -91,31 +95,35 @@ function Write() {
    return <div>Loading...</div>;  
   }  
   
-  return (  
-   <div className="SubmitForm">  
-    <h1>Express Your Inner Voice</h1>  
-    <Formik  
-      initialValues={initialValues}  
-      validationSchema={validationSchema}  
-      onSubmit={onSubmit}  
-    >  
-      {({ isSubmitting }) => (  
-       <Form className="NewWrite">  
-        <label className="Label">Add Image</label>  
-        <Field type="text" name="image" placeholder="Add Image" />  
-        <ErrorMessage name="image" component="div" />  
-        <label className="Label">Title</label>  
-        <Field type="text" name="title" placeholder="Title..." />  
-        <ErrorMessage name="title" component="div" />  
-        <label className="Label">Story</label>  
-        <Field type="textarea" name="story" />  
-        <ErrorMessage name="story" component="div" />  
-        <input type="submit" value={id ? 'Save Changes' : 'Submit'} disabled={isSubmitting} />  
-       </Form>  
-      )}  
-    </Formik>  
-   </div>  
-  );  
+  
+return (  
+  <div className="SubmitForm">  
+   <h1>Express Your Inner Voice</h1>  
+   <Formik  
+    initialValues={initialValues}  
+    validationSchema={validationSchema}  
+    onSubmit={onSubmit}  
+   >  
+    {({ isSubmitting }) => (  
+      <Form className="NewWrite">   
+       <Field type="text" name="image" placeholder="Add image..." className="google-docs-input" />  
+       <ErrorMessage name="image" component="div" />  
+       <Field type="text" name="title" placeholder="Title..." className='google-docs-input'/>  
+       <ErrorMessage name="title" component="div" />    
+       <div className="writing-container">  
+        <div className="scrolling-container">  
+          <div className="page-wrapper">  
+           <Field component="textarea" name="story" className='google-docs-textarea' placeholder="Start writing..." wrap="hard" />  
+          </div>  
+        </div>  
+       </div>  
+       <ErrorMessage name="story" component="div" />  
+       <input type="submit" value={id ? 'Save Changes' : 'Submit'} disabled={isSubmitting} className='google-docs-button' />  
+      </Form>  
+    )}  
+   </Formik>  
+  </div>  
+);
 }  
   
 export default Write

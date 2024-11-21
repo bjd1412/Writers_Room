@@ -1,4 +1,4 @@
-
+import "./Global.css"
 import './App.css';  
 import { Outlet, useNavigate } from 'react-router-dom';  
 import NavBar from './Components/NavBar';  

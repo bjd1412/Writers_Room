@@ -25,7 +25,7 @@ const allStories = stories.filter(story => {
     return (
         <div className="Main">
             <h2>Explore New Voices </h2>
-            <input className="List" name="search" value={search} onChange={searchChange}></input>
+            <input className="List" name="search" placeholder="Search" value={search} onChange={searchChange}></input>
             <StoryList allStories={allStories}/>
 
         </div>

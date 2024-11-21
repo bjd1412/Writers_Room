@@ -6,7 +6,7 @@ function StoryList({allStories}) {
     return(
         <div>
             <div className="StoryList">
-                {allStories.map(story => (<StoryInfo key={story.id} id={story.id} image={story.image} title={story.title} created_at={story.created_at}/>))}
+                {allStories.map(story => (<StoryInfo key={story.id} user={story.user} id={story.id} image={story.image} title={story.title} created_at={story.created_at}/>))}
             </div>
         </div>
     )

@@ -1,4 +1,5 @@
-import Logout from "../Components/Logout"
+import React from "react"
+
 function Home () {
 
     

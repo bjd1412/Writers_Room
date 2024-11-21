@@ -1,14 +1,18 @@
 import {Link} from "react-router-dom"
+import DefaultBook from "./images/DefaultBook.jpg"
+import moment from 'moment'
 
-function StoryInfo({id, title, image, created_at }) {
+function StoryInfo({id, title, image, created_at, user}) {
+    const imageURL = image || DefaultBook
 
 
     return (
         <div>
-            <li className="StoryList">
-                <img src={image} alt={"work image"}/>
+            <li className="StoryCard">
+                <img src={imageURL} alt={"work image"} className="StoryImage"/>
                 <Link className="link-class" to={`/stories/${id}`}>{title}</Link>
-                <h3>{created_at}</h3>
+                <small>by: {user && user.username}</small>
+                <small>{moment(created_at).format('MM-DD-YYYY')}</small>
             </li>
         </div>
     )

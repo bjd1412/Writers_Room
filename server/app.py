@@ -137,31 +137,35 @@ class CheckSession(Resource):
         
 
 class Stories(Resource):
+
     def get(self):
-        story = Story.query.all()   
-        stories = []   
-        for write in story:
-            story_dict = write.to_dict(rules=("-comments", "-user"))   
-            stories.append(story_dict)   
+        story = Story.query.all()    
+        stories = []    
+        for write in story:  
+            story_dict = write.to_dict(rules=("-comments",))  
+            if write.user:  
+                story_dict["user"] = write.user.to_dict(rules=("-stories",))  
+            stories.append(story_dict)    
         return make_response(stories, 200)
   
-    def post(self):   
-      if 'user_id' not in session:   
-        return make_response({"Error": "Not logged in"}, 401)   
-      data = request.form   
-      try:   
-        new_story = Story(   
-           image=data["image"],   
-           title=data["title"],   
-           story=data["story"],  
-           user_id=session["user_id"]  
-        )   
-        db.session.add(new_story)   
-        db.session.commit()   
-        return make_response(new_story.to_dict(rules=("-comments",)), 200)   
-      except Exception as e:
-        print(e)   
-        return make_response({"Error": str(e)}, 400)  
+    def post(self):
+
+        if 'user_id' not in session:   
+            return make_response({"Error": "Not logged in"}, 401)   
+        data = request.form   
+        try:   
+            new_story = Story(   
+               image=data["image"],   
+               title=data["title"],   
+               story=data["story"],  
+               user_id=session["user_id"]  
+            )   
+            db.session.add(new_story)   
+            db.session.commit()   
+            return make_response(new_story.to_dict(rules=("-comments",)), 200)   
+        except Exception as e:
+            print(e)   
+            return make_response({"Error": str(e)}, 400)  
   
 class Story_ID(Resource):  
     
