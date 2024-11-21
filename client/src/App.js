@@ -82,7 +82,8 @@ function App() {
   
   function handleLogin(newUser) {
     setUser(newUser)  
-   setCurrentUser(newUser)  
+   setCurrentUser(newUser)
+     
   }  
    
   return (
