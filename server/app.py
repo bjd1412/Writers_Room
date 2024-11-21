@@ -100,20 +100,20 @@ class User_ID(Resource):
             return make_response({"Error": "User not found"}, 404)
 
 class Login(Resource):  
-   def post(self):  
-      try:  
-        data = request.form  
-        username = data["username"]  
-        password = data["password"]  
-        user = User.query.filter(User.username==username).first()  
-        if user and user.password == password:
-            session['user_id'] = user.id
-            return make_response(user.to_dict(rules=("-stories",)), 200) 
-        else:  
-           return make_response({"Error": "Invalid username or password"}, 401)  
-      except Exception as e:  
-        print(e)  # Print the error message to the console  
-        return make_response({"Error": str(e)}, 500)
+    def post(self):  
+        try:  
+            data = request.form  
+            username = data["username"]  
+            password = data["password"]  
+            user = User.query.filter(User.username==username).first()  
+            if user and user.password == password:
+                session['user_id'] = user.id
+                return make_response(user.to_dict(rules=("-stories",)), 200) 
+            else:  
+                return make_response({"Error": "Invalid username or password"}, 401)  
+        except Exception as e:  
+            print(e)  # Print the error message to the console  
+            return make_response({"Error": str(e)}, 500)
 
 class Logout(Resource):
 
@@ -124,16 +124,16 @@ class Logout(Resource):
             
 class CheckSession(Resource):
 
-   def get(self):
 
-    if 'user_id' in session:  
-        user = db.session.get(User, session['user_id'])  
-        if user:  
-            return make_response(user.to_dict(), 200)  
+    def get(self):
+        if 'user_id' in session:  
+            user = db.session.get(User, session['user_id'])  
+            if user:  
+                return make_response(user.to_dict(), 200)  
+            else:  
+                return make_response({"Error": "User not found"}, 404)  
         else:  
-            return make_response({"Error": "User not found"}, 404)  
-    else:  
-        return make_response({"Error": "Not logged in"}, 401)
+            return make_response({"Error": "Not logged in"}, 401)
         
 
 class Stories(Resource):
@@ -243,45 +243,45 @@ class Comments(Resource):
 
       
   
-class CommentResource(Resource):  
-   def get(self, id):  
-      comment = Comment.query.filter_by(id=id).first()  
-      if comment:  
-        return make_response(comment.to_dict(), 200)  
-      else:  
-        return make_response({"Error": "Comment not found"}, 404)  
-  
-   def patch(self, id):  
-      comment = Comment.query.filter(Comment.id == id).first()  
-      data = request.form  
-      if comment:  
-        try:  
-           for attr in data:  
-              setattr(comment, attr, data[attr])  
-           db.session.commit()  
-           return make_response(comment.to_dict(), 200)  
-        except:  
-           return make_response({"Error": "Validation Error"}, 400)  
-      else:  
-        return make_response({"Error": "Comment not found"}, 404)  
-  
-   def delete(self, id):
+class CommentResource(Resource):
 
-    comment = Comment.query.filter(Comment.id==id).first()  
-    if comment:  
-      if 'user_id' in session and comment.user_id == session['user_id']:  
-        db.session.query(Comment).filter(Comment.id==id).delete()  
-        db.session.commit()  
-        return make_response({"message": "Comment deleted successfully"}, 200)  
-      else:  
-        return make_response({"Error": "Not Authorized to delete this comment"}, 401)  
-    else:  
-      return make_response({"Error": "Comment not found."}, 404)
+    def get(self, id):
+        comment = Comment.query.filter_by(id=id).first()  
+        if comment:  
+            return make_response(comment.to_dict(), 200)  
+        else:  
+            return make_response({"Error": "Comment not found"}, 404)  
+  
+    def patch(self, id):
+        comment = Comment.query.filter(Comment.id == id).first()  
+        data = request.form  
+        if comment:
+            try:  
+                for attr in data:  
+                    setattr(comment, attr, data[attr])  
+                db.session.commit()  
+                return make_response(comment.to_dict(), 200)  
+            except:  
+                return make_response({"Error": "Validation Error"}, 400)  
+        else:  
+            return make_response({"Error": "Comment not found"}, 404)  
+  
+    def delete(self, id):
+        comment = Comment.query.filter(Comment.id==id).first()  
+        if comment:  
+            if 'user_id' in session and comment.user_id == session['user_id']:  
+                db.session.query(Comment).filter(Comment.id==id).delete()  
+                db.session.commit()  
+                return make_response({"message": "Comment deleted successfully"}, 200)  
+            else:  
+                return make_response({"Error": "Not Authorized to delete this comment"}, 401)  
+        else:  
+            return make_response({"Error": "Comment not found."}, 404)
   
 class CommentsByStoryID(Resource):  
-   def get(self, story_id):  
-      comments = Comment.query.filter(Comment.story_id == story_id).all()  
-      return make_response([comment.to_dict() for comment in comments], 200)  
+    def get(self, story_id):
+        comments = Comment.query.filter(Comment.story_id == story_id).all()  
+        return make_response([comment.to_dict() for comment in comments], 200)  
   
 api.add_resource(Users, '/users')  
 api.add_resource(User_ID, '/users/<int:id>')

@@ -97,31 +97,31 @@
   background-color: #ffffff;  
 }
 .MainStory {  
-  width: 800px; /* adjust the width to your liking */  
-  margin: 40px auto; /* center the container */  
-  padding: 20px; /* add some padding to the container */  
-  background-color: #f9f9f9; /* add a light gray background */  
-  border: 1px solid #ccc; /* add a subtle border */  
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* add a subtle shadow */  
+  width: 800px;  
+  margin: 40px auto; 
+  padding: 20px;  
+  background-color: #f9f9f9;   
+  border: 1px solid #ccc;   
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);   
 }  
   
 .MainStory img {  
-  width: 100%; /* make the image full-width */  
-  height: auto; /* make the image responsive */  
-  margin-bottom: 20px; /* add some space between the image and the text */  
+  width: 100%;   
+  height: auto;   
+  margin-bottom: 20px;   
 }  
   
 .MainStory h2 {  
-  font-size: 24px; /* adjust the font size to your liking */  
-  font-weight: bold; /* make the title bold */  
-  margin-bottom: 10px; /* add some space between the title and the text */  
+  font-size: 24px;   
+  font-weight: bold;   
+  margin-bottom: 10px;   
 }  
   
 .MainStory p {  
-  font-size: 16px; /* adjust the font size to your liking */  
-  font-family: Arial, sans-serif; /* use a readable font */  
-  line-height: 1.5; /* adjust the line height to your liking */  
-  margin-bottom: 20px; /* add some space between paragraphs */
+  font-size: 16px;  
+  font-family: Arial, sans-serif;  
+  line-height: 1.5;   
+  margin-bottom: 20px; 
   white-space: pre-wrap;  
 }
 
