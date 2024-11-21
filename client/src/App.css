@@ -168,3 +168,90 @@
 .StoryCard small {  
   font-size: 10px;  
 }
+
+
+.AccountPage {  
+  display: grid;  
+  grid-template-columns: repeat(3, 1fr);  
+  grid-gap: 10px;  
+  padding: 20px;
+}  
+  
+.AccountCard {  
+  display: flex;  
+  flex-direction: column;  
+  align-items: center;  
+  justify-content: center;  
+  background-color: #fff;  
+  border: 1px solid #ddd;  
+  border-radius: 10px;  
+  padding: 20px;  
+  width: 200px;  
+  height: 300px;  
+  position: relative;  
+}  
+
+.AccountCardContent {  
+  text-align: center;  
+  margin-bottom: 20px;  
+}
+.AccountImage {  
+  width: 150px;  
+  height: 150px;  
+  object-fit: cover;  
+  border-radius: 10px 10px 0 0;  
+  margin-bottom: 10px;  
+}  
+  
+.AccountCard a {  
+  text-decoration: none;  
+  color: #333;  
+}  
+  
+.AccountCard a:hover {  
+  text-decoration: none;  
+  color: #333; 
+  background-color: transparent;  
+}  
+  
+.AccountCard small {  
+  font-size: 10px;  
+}
+
+
+.EditButton {  
+  background-color: #000;  
+  color: #fff;  
+  padding: 10px 20px;  
+  border: none;  
+  border-radius: 5px;  
+  cursor: pointer;  
+  position: absolute;   
+  bottom: 10px;  
+  left: 50%;   
+  transform: translateX(-50%);
+}  
+  
+.EditButton:hover {  
+  background-color: #333;  
+}
+
+
+.MainStory img {  
+  max-width: 1000px;  
+  max-height: 900px;  
+  object-fit: contain;  
+}
+
+.DeleteButton {  
+  background-color: #ff0000;  
+  color: #fff;  
+  padding: 10px 20px;  
+  border: none;  
+  border-radius: 5px;  
+  cursor: pointer;  
+}  
+  
+.DeleteButton:hover {  
+  background-color: #cc0000;  
+}

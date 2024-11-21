@@ -203,9 +203,12 @@ class Story_ID(Resource):
     def delete(self, id):
         story = Story.query.filter(Story.id == id).first()
         if story:
-            db.session.delete(story)
-            db.session.commit()
-            return make_response("", 204)
+            if "user_id" in session and story.user_id == session["user_id"]:
+                db.session.delete(story)
+                db.session.commit()
+                return make_response({"message": "Story deleted successfully"}, 200)
+            else:
+                return make_response({"Error": "Not Authorized to delete this story"}, 401)
         else:
             return make_response({"Error": "Story does not exist"}, 404)
   

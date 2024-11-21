@@ -13,10 +13,10 @@
   }
   
   .NavBarLogo {  
-    width: 1000px;  
+    width: 400px;  
     height: 50px;  
     object-fit: contain;   
-    margin: 0 10px;   
+    margin: 0 525px;   
   }
     
   .NavBar a {  

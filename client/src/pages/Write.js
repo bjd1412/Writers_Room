@@ -41,12 +41,10 @@ function Write() {
   }, [id]);  
   
   useEffect(() => {  
-   if (!user) {  
-    navigate('/login');  
-   } else if (id && story && story.user_id !== user.id) {  
-    navigate('/login');  
-   }  
-  }, [user, id, story]);  
+    if (!user && !id) {  
+     navigate('/login');  
+    }  
+   }, [user, id]);  
   
   const validationSchema = Yup.object().shape({  
    title: Yup.string().required('Title is required'),  

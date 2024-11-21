@@ -37,14 +37,11 @@ const onSubmit = (values, { setSubmitting }) => {
       throw new Error(res.statusText);  
     }  
    })  
-   .then(user => {  
-    console.log('user:', user);  
-    handleLogin(user);  
-    if (window.location.pathname === '/login' && window.history.state.from === '/write') {  
-      navigate('/write');  
-    } else {  
-      navigate(`/account/${user.username}`);  
-    }  
+   .then(user => {
+    if (user){
+      handleLogin(user);
+      navigate(`/account/${user.username}`);
+    }   
    })  
    .catch(error => {  
     console.error('Error:', error);  
@@ -54,8 +51,7 @@ const onSubmit = (values, { setSubmitting }) => {
    });  
   setSubmitting(false)  
 };
-
-  
+ 
   return (  
    <div className="SubmitForm">  
     <h1>Login</h1>  
