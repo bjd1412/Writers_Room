@@ -2,10 +2,12 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';  
 import StoryContext from "../Components/StoryContext" 
 import { useContext } from "react";  
-import * as Yup from 'yup';  
+import * as Yup from 'yup';
+import { useNavigate } from "react-router-dom";  
 
 function Register(){
     const {handleSubmitUser} = useContext(StoryContext)
+    const navigate = useNavigate()
 
     const initialValues = {
         username: '',
@@ -36,7 +38,8 @@ function Register(){
           })  
           .then(newUser => {  
             console.log('newWrite:', newUser);  
-            handleSubmitUser(newUser);  
+            handleSubmitUser(newUser);
+            navigate('/login')  
           })  
           .catch(error => {  
             console.error('Error:', error);  
