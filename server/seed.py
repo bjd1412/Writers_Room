@@ -16,7 +16,6 @@ if __name__ == '__main__':
     fake = Faker()
     with app.app_context():
         print("Starting seed...")
-        # Seed code goes here!
         User.query.delete()
         Story.query.delete()
         Comment.query.delete()
@@ -27,8 +26,8 @@ if __name__ == '__main__':
         db.session.add_all([W3, J2])
         db.session.commit()
 
-        s1 = Story(title="A Glimpse Of Us", story="You know you can make it, but not alone, I’ve left quiet letters on the wall, hoping someday, you’ll see them all, and feel the truth—you're not alone.\n In my mind, I play back memories, a reel of you, time's gentle tease. If only you were here each day, to chase the loneliness away.\n This quiet ache, it steals my peace, I’m worn from wandering, seeking release. I’m tired of the darkness, tired of the cold—and all I want is a hand to hold.", created_at=datetime.datetime(2024, 1, 12))
-        s2 = Story(title="Never Ending", story="Gray clouds drift slowly,\nsilent tears fall without end,\nlost in autumn's hush.", created_at=datetime.datetime(2024, 4, 22))
+        s1 = Story(title="A Glimpse Of Us", image="https://cdnb.artstation.com/p/assets/images/images/008/448/553/large/ben-jelter-eternal-bond.jpg?1512851430", story="You know you can make it, but not alone, I’ve left quiet letters on the wall, hoping someday, you’ll see them all, and feel the truth—you're not alone.\n In my mind, I play back memories, a reel of you, time's gentle tease. If only you were here each day, to chase the loneliness away.\n This quiet ache, it steals my peace, I’m worn from wandering, seeking release. I’m tired of the darkness, tired of the cold—and all I want is a hand to hold.", created_at=datetime.datetime(2024, 1, 12), user_id=2)
+        s2 = Story(title="Never Ending", image="https://static.vecteezy.com/system/resources/thumbnails/051/748/336/small_2x/david-and-bathsheba-are-captured-in-a-tranquil-garden-reflecting-on-their-past-lush-greenery-and-flowing-water-enhance-the-serene-atmosphere-of-this-biblical-moment-photo.jpeg", story="Gray clouds drift slowly,\nsilent tears fall without end,\nlost in autumn's hush.", created_at=datetime.datetime(2024, 4, 22), user_id=1)
         db.session.add_all([s1, s2])
         db.session.commit()
 

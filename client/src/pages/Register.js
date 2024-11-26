@@ -44,29 +44,34 @@ function Register(){
          setSubmitting(false)
     };
 
-    return (
-        <div>
-            <h1>Create Account</h1>
-            <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-            >
-            {({isSubmitting})=> (
-                <Form className="CreateAccount">
-                    <label className="Label">Username</label>
-                    <Field type="text" name="username"/>
-                    <ErrorMessage name="username" component="div"/>
-                    <label className="Label">Password</label>
-                    <Field type="text" name="password"/>
-                    <ErrorMessage name="password" component="div"/>
-                    <input type="submit" value="Create" disabled={isSubmitting}/>
-                </Form>
-            )}
-
-            </Formik>
-        </div>
-    )
+    return (  
+        <div className="register-container">  
+         <h1 className="register-header">Create Account</h1>  
+         <Formik  
+          initialValues={initialValues}  
+          validationSchema={validationSchema}  
+          onSubmit={onSubmit}  
+         >  
+          {({ isSubmitting }) => (  
+            <Form className="register-form">  
+             <div className="form-group">  
+              <label className="form-label">Username</label>  
+              <Field type="text" name="username" placeholder="Username" className="form-input" />  
+              <ErrorMessage name="username" component="div" className="form-error" />  
+             </div>  
+             <div className="form-group">  
+              <label className="form-label">Password</label>  
+              <Field type="password" name="password" placeholder="Password" className="form-input" />  
+              <ErrorMessage name="password" component="div" className="form-error" />  
+             </div>  
+             <button type="submit" className="register-button" disabled={isSubmitting}>  
+              Create  
+             </button>  
+            </Form>  
+          )}  
+         </Formik>  
+        </div>  
+      )
 }
 
 export default Register

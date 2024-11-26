@@ -2,12 +2,14 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik';  
 import StoryContext from "./StoryContext";  
 import { useContext } from "react";  
-import * as Yup from 'yup';  
+import * as Yup from 'yup';
+import { useNavigate } from "react-router-dom";  
 
 function AddComment ({storyId}) {
     console.log('storyId:', storyId);
 
-    const { handleSubmitComments } = useContext(StoryContext);
+    const { handleSubmitComments, user } = useContext(StoryContext);
+    const navigate = useNavigate()
 
     const initialValues = {  
         comment: ''  
@@ -17,7 +19,13 @@ function AddComment ({storyId}) {
         comment: Yup.string().trim().required('Comment cannot be empty'),
        });  
        
-       const onSubmit = (values, { setSubmitting, resetForm }) => {  
+       const onSubmit = (values, { setSubmitting, resetForm }) => {
+        
+        if(!user) {
+          navigate('/login');
+          return;
+        }
+
         const formData = new FormData();  
         formData.append('comment', values.comment);
         formData.append('story_id', storyId);    

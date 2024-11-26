@@ -54,9 +54,14 @@
   .login-button {  
     background-color: rgba(173, 216, 230, 0.5);  
     color: #000000;  
-    padding: 10px 15px;  
+    padding: 5px 15px;  
     border: 1px solid #ccc;  
     border-radius: 5px;  
     text-decoration: none;  
     margin: 0 5px;  
   }
+
+  .register-button1:hover {  
+    background-color: #3e8e41;  
+  }
+  
