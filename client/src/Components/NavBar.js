@@ -3,7 +3,7 @@ import "../Components/NavBar.css";
 import { useContext } from "react";  
 import StoryContext from "../Components/StoryContext";
 import "../Components/NavBar.css"
-import Writerrrr from "./images/Writerrrr.png"
+import Writerrrr from "../images/Writerrrr.png"
 
   
 function NavBar(){  

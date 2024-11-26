@@ -52,28 +52,34 @@ const onSubmit = (values, { setSubmitting }) => {
   setSubmitting(false)  
 };
  
-  return (  
-   <div className="SubmitForm">  
-    <h1>Login</h1>  
-    <Formik  
-      initialValues={initialValues}  
-      validationSchema={validationSchema}  
-      onSubmit={onSubmit}  
-    >  
-      {({ isSubmitting }) => (  
-       <Form className="NewWrite">  
-        <label className="Label">Username</label>  
-        <Field type="text" name="username" placeholder="Username" />  
-        <ErrorMessage name="username" component="div" />  
-        <label className="Label">Password</label>  
-        <Field type="password" name="password" placeholder="Password" />  
-        <ErrorMessage name="password" component="div" />  
-        <input type="submit" value="Login" disabled={isSubmitting} />  
-       </Form>  
-      )}  
-    </Formik>  
-   </div>  
-  )  
+return (  
+  <div className="login-container">  
+   <h1 className="login-header">Login</h1>  
+   <Formik  
+    initialValues={initialValues}  
+    validationSchema={validationSchema}  
+    onSubmit={onSubmit}  
+   >  
+    {({ isSubmitting }) => (  
+      <Form className="login-form">  
+       <div className="form-group">  
+        <label className="form-label">Username</label>  
+        <Field type="text" name="username" placeholder="Username" className="form-input" />  
+        <ErrorMessage name="username" component="div" className="form-error" />  
+       </div>  
+       <div className="form-group">  
+        <label className="form-label">Password</label>  
+        <Field type="password" name="password" placeholder="Password" className="form-input" />  
+        <ErrorMessage name="password" component="div" className="form-error" />  
+       </div>  
+       <button type="submit" className="login-button" disabled={isSubmitting}>  
+        Login  
+       </button>  
+      </Form>  
+    )}  
+   </Formik>  
+  </div>  
+)
 }  
   
 export default Login;

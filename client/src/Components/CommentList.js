@@ -15,12 +15,16 @@ function CommentList({ comment, created_at, user_id, currentUser, handleDeleteCl
   }, [user_id]);  
   
   return (  
-   <div>  
-    <p>{comment}</p>  
-    <p>Created at: {created_at}</p>  
-    {user && <p>By: {user.username}</p>}  
+   <div className="comment-container">  
+   <div className="comment-header">    
+    <span className="comment-username">{user && user.username}</span>
+    <span className="comment-created-at">{created_at}</span>
+    </div>
+    <div className="comment-body">
+    <p>{comment}</p>
+    </div>  
     {currentUser && currentUser.id === user_id ? (  
-      <button onClick={handleDeleteClick}>Delete</button>  
+      <button className="comment-delete-button" onClick={handleDeleteClick}>Delete</button>  
     ) : null}  
    </div>  
   );  

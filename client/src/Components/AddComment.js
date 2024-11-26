@@ -17,7 +17,7 @@ function AddComment ({storyId}) {
         comment: Yup.string().trim().required('Comment cannot be empty'),
        });  
        
-       const onSubmit = (values, { setSubmitting }) => {  
+       const onSubmit = (values, { setSubmitting, resetForm }) => {  
         const formData = new FormData();  
         formData.append('comment', values.comment);
         formData.append('story_id', storyId);    
@@ -36,7 +36,8 @@ function AddComment ({storyId}) {
          })  
          .then(newComment => {  
            console.log('newComment:', newComment);  
-           handleSubmitComments(newComment);  
+           handleSubmitComments(newComment); 
+           resetForm() 
          })  
          .catch(error => {  
            console.error('Error:', error);  

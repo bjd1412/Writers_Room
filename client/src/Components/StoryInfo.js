@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom"
-import DefaultBook from "./images/DefaultBook.jpg"
+import DefaultBook from "../images/DefaultBook.jpg"
 import moment from 'moment'
 
 function StoryInfo({id, title, image, created_at, user}) {
