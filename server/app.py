@@ -5,6 +5,7 @@ from flask_restful import Api, Resource
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from extensions import bcrypt
 
 # Instantiate app, set attributes
 app = Flask(__name__)
@@ -17,6 +18,7 @@ migrate = Migrate(app, db)
 
 db.init_app(app)
 
+bcrypt.init_app(app)
 
 api = Api(app)
 
@@ -106,13 +108,13 @@ class Login(Resource):
             username = data["username"]  
             password = data["password"]  
             user = User.query.filter(User.username==username).first()  
-            if user and user.password == password:
+            if user and user.check_password(password):
                 session['user_id'] = user.id
                 return make_response(user.to_dict(rules=("-stories",)), 200) 
             else:  
                 return make_response({"Error": "Invalid username or password"}, 401)  
         except Exception as e:  
-            print(e)  # Print the error message to the console  
+            print(e)   
             return make_response({"Error": str(e)}, 500)
 
 class Logout(Resource):

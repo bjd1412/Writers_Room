@@ -3,6 +3,7 @@ from sqlalchemy import MetaData
 from sqlalchemy.orm import validates
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy_serializer import SerializerMixin
+from extensions import bcrypt
 
 convention = {
     "ix": "ix_%(column_0_label)s",
@@ -44,10 +45,12 @@ class User(db.Model, SerializerMixin):
         if len(password) < 8:
             raise ValueError("Password must have at least 8 characters.")
         else:
-            return password
+            return bcrypt.generate_password_hash(password).decode("utf-8")
 
 
-    
+    def check_password(self, password):  
+      return bcrypt.check_password_hash(self.password, password)
+
     def __repr__(self):
         return f"<User: {self.id}, {self.username}"
 
