@@ -35,14 +35,14 @@ class User(db.Model, SerializerMixin):
         if username == User.query.filter(User.username==username).first():
             raise ValueError("Username already taken")
         elif len(username) < 3:
-            return ValueError("Username must have at least 3 characters")
+            raise ValueError("Username must have at least 3 characters")
         else:
             return username
 
     @validates("password")
     def validate_password(self, key, password):
         if len(password) < 8:
-            return ValueError("Password must have at least 8 characters.")
+            raise ValueError("Password must have at least 8 characters.")
         else:
             return password
 
@@ -71,14 +71,14 @@ class Story(db.Model, SerializerMixin):
    @validates("title")  
    def validate_title(self, key, title):  
       if not title:  
-        return ValueError("Your work must have a title")  
+        raise ValueError("Your work must have a title")  
       else:  
         return title  
   
    @validates("story")  
    def validate_story(self, key, story):  
       if not story:  
-        return ValueError("There is no work to submit")         
+        raise ValueError("There is no work to submit")         
       else:  
         return story  
   
@@ -105,7 +105,7 @@ class Comment(db.Model, SerializerMixin):
     @validates("comment")
     def validate_comment(self, key, comment):
         if not comment:
-            return ValueError("There is no comment to submit")
+            raise ValueError("There is no comment to submit")
         else:
             return comment
 
